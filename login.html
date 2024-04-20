@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Login Page - Product Admin Template</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+  <!-- https://fonts.google.com/specimen/Open+Sans -->
+  <link rel="stylesheet" href="/css/fontawesome.min.css" />
+  <!-- https://fontawesome.com/ -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <!-- https://getbootstrap.com/ -->
+  <link rel="stylesheet" href="/css/templatemo-style.css">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+</head>
+
+<body>
+  <div id="snackbar">Some text some message..</div>
+  <div>
+    <nav class="navbar navbar-expand-xl " style="height: 86px;">
+      <div class="container h-100">
+        <a class="navbar-brand" href="index.html" style="margin:0 auto; font-size:60px;">
+          <h1 class="tm-site-title mb-0" style="font-size:40px;">DATLearn Admin</h1>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container tm-mt-big tm-mb-big">
+    <div class="row">
+      <div class="col-12 mx-auto tm-login-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h2 class="tm-block-title mb-4" style="font-size: 50px;">Login</h2>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-12">
+              <form method="post" class="tm-login-form">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input name="username" type="text" class="form-control validate" id="username" value="" required />
+                </div>
+                <div class="form-group mt-3">
+                  <label for="password">Password</label>
+                  <input name="password" type="password" class="form-control validate" id="password" value=""
+                    required />
+                </div>
+                <div class="form-group mt-4">
+                  <button type="submit" class="btn btn-primary btn-block text-uppercase">
+                    Login
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/jquery-3.3.1.min.js"></script>
+  <!-- https://jquery.com/download/ -->
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/script.js"> </script>
+  <!-- https://getbootstrap.com/ -->
+  <script>
+    document.getElementsByTagName('form')[0].addEventListener('submit', (e) => {
+      e.preventDefault();
+      d = {
+        "password": document.getElementById('password').value,
+        "email": document.getElementById('username').value
+      }
+      API('http://localhost:8080/api/admin/sign-in', 'POST', null, d).then(data => {
+        if (data.status !== 'OK') {
+          var x = document.getElementById("snackbar");
+          x.innerText = data.message
+          x.className = "show";
+          setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        } else {
+          data = data.data
+          window.localStorage.setItem('accessTokenADMIN', data.tokens.accessToken)
+          window.localStorage.setItem('refreshTokenADMIN', data.tokens.refreshToken)
+          window.localStorage.setItem('fullnameADMIN', data.userInfo.fullName)
+          window.location.href = '/'
+        }
+      })
+    })
+    if (window.localStorage.getItem('accessTokenADMIN')) window.location.href = '/'
+  </script>
+</body>
+
+</html>

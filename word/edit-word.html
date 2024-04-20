@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Thêm từ vựng</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+    <link rel="stylesheet" href="/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="/jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/templatemo-style.css">
+    <style>
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 260px;
+            overflow: scroll;
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+    </style>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div id="snackbar">Some text some message..</div>
+    <nav class="navbar navbar-expand-xl">
+        <div class="container h-100">
+            <a class="navbar-brand" href="index.html">
+                <h1 class="tm-site-title mb-0">DATLEARN ADMIN</h1>
+            </a>
+            <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars tm-nav-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto h-100">
+                    <li class="nav-item">
+                        <a class="nav-link " href="/index.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="far fa-file-alt"></i>
+                            <span>
+                                Từ Vựng <i class="fas fa-angle-down"></i>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/level/level.html">Quản Lý Cấp Bậc</a>
+                            <a class="dropdown-item" href="/topic/topic.html">Quản Lý Chủ Đề</a>
+                            <a class="dropdown-item" href="/word/word.html">Quản Lý Từ Vựng</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/product/products.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            Phần Thưởng
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/accounts.html">
+                            <i class="far fa-user"></i>
+                            Accounts
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link d-block" href="/login.html" id="adminname">
+                            <span id="fullname"></span>, <b>Logout</b>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container tm-mt-big tm-mb-big">
+        <div class="row">
+            <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+                <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="tm-block-title d-inline-block">Thông tin của từ</h2>
+                        </div>
+                    </div>
+                    <div class="row tm-edit-product-row">
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <form action="" method="post" class="tm-edit-product-form">
+                                <div class="form-group mb-3">
+                                    <label for="word">Từ vựng
+                                    </label>
+                                    <input id="word" name="word" type="text" value="" placeholder="Từ vựng" required
+                                        class="form-control validate" />
+                                </div>
+                                <div class="form-group mb-3" style="display: none;">
+                                    <label for="voice">voice
+                                    </label>
+                                    <input id="voice" name="voice" type="text" value="" placeholder="voice" required
+                                        class="form-control validate" />
+                                </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="type">Loại từ
+                                </label>
+                                <select name="type" id="type" class="form-control"
+                                    style="padding-bottom: 10px !important; padding-top: 10px !important">
+                                    <option value="adjective(Tính từ)">adjective(Tính từ)</option>
+                                    <option value="adverb(Trạng Từ)">adverb(Trạng Từ)</option>
+                                    <option value="conjunction(Liên từ)">conjunction(Liên từ)</option>
+                                    <option value="determiner(Từ hạn định)">determiner(Từ hạn định)</option>
+                                    <option value="interjection(Thán từ)">interjection(Thán từ)</option>
+                                    <option value="noun(Danh từ)">noun(Danh từ)</option>
+                                    <option value="numeral(Chữ số)">numeral(Chữ số)</option>
+                                    <option value="phrase(Cụm từ)">phrase(Cụm từ)</option>
+                                    <option value="preposition(Giới từ)">preposition(Giới từ)</option>
+                                    <option value="pronoun(Đại từ)">pronoun(Đại từ)</option>
+                                    <option value="sentence(Câu)">sentence(Câu)</option>
+                                    <option value="verb(Động Từ)">verb(Động Từ)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="pronun">Phiên âm
+                                </label>
+                                <input id="pronun" name="pronun" type="text" value="" placeholder="Phiên âm" required
+                                    class="form-control validate" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="mean">Nghĩa
+                                </label>
+                                <input id="mean" name="mean" type="text" value="" placeholder="Nghĩa của từ" required
+                                    class="form-control validate" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="endesc">Mô tả tiếng anh
+                                </label>
+                                <input id="endesc" name="endesc" type="text" value="" placeholder="Mô tả tiếng anh"
+                                    required class="form-control validate" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="videsc">Mô tả tiếng việt
+                                </label>
+                                <input id="videsc" name="videsc" type="text" value="" placeholder="Mô tả tiếng việt"
+                                    required class="form-control validate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                        <div class="tm-product-img-edit mx-auto">
+                            <img src="/img/product-image.jpg" alt="Product image" class="img-fluid d-block mx-auto"
+                                id="img">
+                            <i class="fas fa-cloud-upload-alt tm-upload-icon"
+                                onclick="document.getElementById('fileInput').click();"></i>
+                        </div>
+                        <div class="custom-file mt-3 mb-3">
+                            <input id="fileInput" type="file" style="display:none;" />
+                            <input type="button" class="btn btn-secondary btn-block mx-auto" value="Thay đổi hình ảnh"
+                                onclick="document.getElementById('fileInput').click();" />
+                        </div>
+                        <div class="custom-file mt-3 mb-3" style="display: none;">
+                            <input id="image" name="image" type="text" value="" placeholder="image" required
+                                class="form-control " />
+                        </div>
+                    </div>
+                    <div class="row tm-edit-product-row">
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <button type="submit" id="btn-submit" class="btn btn-primary btn-block text-uppercase">Chỉnh
+                                sửa từ</button>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6">
+                            <button type="button" id="btn-cancel" class="btn btn-danger btn-block text-uppercase"
+                                onclick="window.location.href='/word/word.html'">Hủy</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/script.js"></script>
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/jquery-ui-datepicker/jquery-ui.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- image -->
+    <script>
+        const file = document.getElementById("fileInput")
+        file.addEventListener("change", ev => {
+            const formdata = new FormData()
+            formdata.append("image", ev.target.files[0])
+            fetch("https://api.imgur.com/3/image/", {
+                method: "post",
+                headers: {
+                    Authorization: "Client-ID 59ab98495609928"
+                }
+                , body: formdata
+            }).then(data => data.json()).then(data => {
+                document.getElementById('img').src = data.data.link
+                document.getElementById('image').value = data.data.link
+                console.log(data.data.link)
+            })
+        })
+    </script>
+    <!-- Lấy dữ liệu -->
+    <script>
+        
+
+        document.getElementById('word').addEventListener('change', () => {
+            word = document.getElementById('word').value;
+            if (word != '') {
+                textToSpeech(word)
+            }
+        })
+        tid = (new URLSearchParams(window.location.search)).get('tid')
+        wid = (new URLSearchParams(window.location.search)).get('wid')
+        API(`http://localhost:8080/api/words/getAll?tid=${tid}`).then(data => {
+            if (data.status === 'OK') {
+                data = data.data
+                data.filter((item) => {
+                    return item.wid = wid;
+                })
+                word = data[0]
+                console.log(word)
+                document.getElementById('img').src = word.photo
+                document.getElementById('image').value = word.photo
+                document.getElementById('word').value = word.word
+                document.getElementById('voice').value = word.voice
+                document.getElementById('pronun').value = word.pronun
+                document.getElementById('mean').value = word.meaning
+                document.getElementById('videsc').value = word.viedesc
+                document.getElementById('endesc').value = word.endesc
+                document.getElementById('type').value = getType(word.entype)
+            }
+        })
+    </script>
+    <!-- Xác nhận sửa -->
+    <script>
+        document.getElementsByTagName('form')[0].addEventListener('submit', (e) => {
+            e.preventDefault();
+            data = {
+                "wid": wid,
+                "word": document.getElementById('word').value,
+                "pronun": document.getElementById('pronun').value,
+                "entype": document.getElementById('type').value.split('(')[0],
+                "vietype": document.getElementById('type').value.split('(')[1].replace(')', ''),
+                "voice": document.getElementById('voice').value,
+                'photo': document.getElementById('image').value,
+                'meaning': document.getElementById('mean').value,
+                'endesc': document.getElementById('endesc').value,
+                'viedesc': document.getElementById('videsc').value,
+                'tid': tid,
+            }
+            API(`http://localhost:8080/api/words/edit`, 'PUT', window.localStorage.getItem('accessTokenADMIN'), data).then(data => {
+                showNotic(data.message, data.status);
+            });
+        })
+
+    </script>
+</body>
+
+</html>

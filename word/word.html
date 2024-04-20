@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Từ vựng</title>
+    <link rel="stylesheet" href="/https://fonts.googleapis.com/css?family=Roboto:400,700" />
+    <link rel="stylesheet" href="/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/templatemo-style.css" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body id="reportsPage">
+    <div id="snackbar">Some text some message..</div>
+    <nav class="navbar navbar-expand-xl">
+        <div class="container h-100">
+            <a class="navbar-brand" href="/index.html">
+                <h1 class="tm-site-title mb-0">DATLEARN ADMIN</h1>
+            </a>
+            <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars tm-nav-icon"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto h-100">
+                    <li class="nav-item">
+                        <a class="nav-link " href="/#">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="/#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="far fa-file-alt"></i>
+                            <span>
+                                Từ Vựng <i class="fas fa-angle-down"></i>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/level/level.html">Quản Lý Cấp Bậc</a>
+                            <a class="dropdown-item" href="/topic/topic.html">Quản Lý Chủ Đề</a>
+                            <a class="dropdown-item" href="/word/word.html">Quản Lý Từ Vựng</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/product/products.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            Phần Thưởng
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/accounts.html">
+                            <i class="far fa-user"></i>
+                            Accounts
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link d-block" href="/login.html" id="adminname">
+                            <span id="fullname"></span>, <b>Logout</b>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="row tm-content-center">
+            <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
+                <div class="tm-bg-primary-dark tm-block-for-product-box tm-block-products">
+                    <div class="form-group mb-3">
+                        <label for="search">Chủ đề</label>
+                        <select id="search" name="search" type="text" value="" class="form-control "
+                            style="padding-bottom: 10px !important; padding-top: 10px !important">
+                        </select>
+                    </div>
+                    <h3 class="tm-block-title">Danh sách từ</h3>
+                    <div class="tm-product-table-container">
+                        <table class="table table-hover tm-table-small tm-product-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">Từ</th>
+                                    <th scope="col">Phiên âm</th>
+                                    <th scope="col">Nghĩa</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="/word/add-word.html" class="btn btn-primary btn-block text-uppercase mb-3">Thêm một từ
+                        mới</a>
+                </div>
+            </div>
+        </div>
+        <script src="/js/script.js"></script>
+        <script src="/js/jquery-3.3.1.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script>
+            API('http://localhost:8080/api/topic/getAllTopic').then(data => {
+                ele = document.getElementById('search')
+                if (data.status === 'OK') {
+                    data = data.data
+                    data.sort((a, b) => {
+                        const nameA = a.tname.toUpperCase();
+                        const nameB = b.tname.toUpperCase();
+                        if (nameA < nameB) {
+                            return -1;
+                        }
+                        if (nameA > nameB) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    data.forEach((item) => {
+                        ele.innerHTML += `<option value="${item.tid}" ${item.tid == 1 ? "selected" : ""}>${item.tname}</option>`
+                    })
+                }
+            })
+        </script>
+        <script>
+            function getWord(tid) {
+                API(`http://localhost:8080/api/words/getAll?tid=${tid}`).then(data => {
+                    if (data.status == 'OK') {
+                        data = data.data
+                        e = document.getElementById('tbody');
+                        r = ""
+                        data.forEach((item) => {
+                            r += `
+                            <tr>
+                                <th scope="row"></th>
+                                <td class="tm-product-name" lid="${item.wid}">${item.word}</td>
+                                <td>/${item.pronun}/</td>
+                                <td>${item.meaning}</td>
+                                <td>
+                                    <a class="tm-product-edit-link">
+                                        <i class="far fa-edit tm-product-edit-icon"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+                        })
+                        e.innerHTML = r
+                        $(function () {
+                            $(".tm-product-name").on("click", function (e) {
+                                window.location.href = `/word/edit-word.html?tid=${tid}&wid=${this.getAttribute('lid')}`;
+                            });
+                        });
+                        $(function () {
+                            $(".tm-product-edit-link").on("click", function (e) {
+                                pid = this.parentElement.parentElement.getElementsByClassName('tm-product-name')[0].getAttribute('lid')
+                                window.location.href = `/word/edit-word.html?tid=${tid}&wid=${pid}`;
+                            });
+                        });
+                    }
+                })
+            }
+            getWord(1)
+            document.getElementById('search').addEventListener('change', () => {
+                tid = document.getElementById('search').value;
+                //getWord(document.getElementById('search').innerText, data)
+                getWord(tid);
+            })
+        </script>
+</body>
+
+</html>
